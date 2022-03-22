@@ -21,7 +21,9 @@ public class MovieRepositoryJdbc implements MovieRepository {
 
     @Override
     public Movie findById(long id) {
-        return null;
+
+        Object[] args = {id};
+        return jdbcTemplate.queryForObject("select * from movies where id = ?", args, movieMapper);
     }
 
     @Override
@@ -32,7 +34,8 @@ public class MovieRepositoryJdbc implements MovieRepository {
 
     @Override
     public void savoOrUpdate(Movie movie) {
-
+        jdbcTemplate.update("insert into movies(name, minutes, genre) values (?,?,?)",
+                movie.getName(), movie.getMinutes(), movie.getGenre().toString());
     }
 
     private static RowMapper<Movie> movieMapper = (resultSet, i) ->
